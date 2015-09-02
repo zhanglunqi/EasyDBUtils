@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.util.Properties;
 
 import com.zlq.easydbutils.EasyDataSource;
-import com.zlq.easydbutils.MyEasyDataSource4c3p0;
 import com.zlq.easydbutils.Runner;
 import com.zlq.easydbutils.annotation.StratTransaction;
 /**
@@ -17,15 +16,22 @@ import com.zlq.easydbutils.annotation.StratTransaction;
  *
  */
 public class EasyFactory {
-	public static Properties propService = new Properties();
-	public static Properties propDao = new Properties();
+	public static final Properties prop = new Properties();
+	private static EasyDataSource eds = null;
 	private static ThreadLocal<Connection> local = new ThreadLocal<Connection>();
-	private static EasyDataSource eds = new MyEasyDataSource4c3p0();
 	static{
 		try {
-			propService.load(EasyFactory.class.getClassLoader().getResourceAsStream("/easyDBUtilsService.properties"));
-			propDao.load(EasyFactory.class.getClassLoader().getResourceAsStream("/easyDBUtilsDao.properties"));
+			prop.load(EasyFactory.class.getClassLoader().getResourceAsStream("/easyDBUtils.properties"));
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			eds =  (EasyDataSource) Class.forName(prop.getProperty("EasyDataSource")).newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	} 
@@ -33,7 +39,7 @@ public class EasyFactory {
 	@SuppressWarnings("unchecked")
 	public static <T> T newServiceInstance(Class<T> clazz) {
 		try {
-			clazz = (Class<T>) Class.forName(propService.getProperty(clazz.getSimpleName()));
+			clazz = (Class<T>) Class.forName(prop.getProperty(clazz.getSimpleName()));
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -84,7 +90,7 @@ public class EasyFactory {
 	@SuppressWarnings("unchecked")
 	public static <T> T newDaoInstance(Class<T> clazz){
 		try {
-			clazz = (Class<T>) Class.forName(propDao.getProperty(clazz.getSimpleName()));
+			clazz = (Class<T>) Class.forName(prop.getProperty(clazz.getSimpleName()));
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

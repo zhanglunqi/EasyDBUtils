@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 			//没使用事务让其产生除0异常
 			//在接口上声明注解让其产生除0异常
 			//@SuppressWarnings("unused")
-		//	int a = 1/0;
+			int a = 1/0;
 			ud.addUser(user);
 		} catch (SQLException e) {
 			e.printStackTrace();

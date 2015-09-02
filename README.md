@@ -1,5 +1,16 @@
 #EasyDBUtils
 
+	**更新说明**
+	1.减少了配置文件的数量，使用一个easyDBUtils.properties的配置文件替代了easyDBUtilsService.properties和easyDBUtilsDao.properties
+	2.将EasyDataSource也写到了easyDBUtils.properties中，key固定为：EasyDataSource,value是实现类的具体路径
+
+	**更新后准备工作跟以前不一样了**
+	需要：
+	1.在src的根目录下创建配置文件easyDBUtils.properties
+	2.实现EasyDataSource接口，并在easyDBUtils.properties完成配置
+	3.业务层和持久层的配置全部写在easyDBUtils.properties文件中
+================================================================================================================================
+
 	软件说明：
 	EasyDBUtils是对DBUtils的功能封装
 
